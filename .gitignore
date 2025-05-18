@@ -13,6 +13,9 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
+# Generated feature c# files
+*.feature.cs
+
 # Mono auto generated files
 mono_crash.*
 
