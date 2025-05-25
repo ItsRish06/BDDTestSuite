@@ -1,8 +1,8 @@
 {
     "url": "https://www.saucedemo.com/",
-    "browser": "chrome",
+    "browser": "firefox",
     "username": {
-        "standard-user": "standard-user",
+        "standard-user": "standard_user",
         "locked-out-user": "locked_out_user"
     },
     "password": {
