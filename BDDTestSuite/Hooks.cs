@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using BDDTestSuite.Utils;
+using Microsoft.Extensions.Configuration;
+using OpenQA.Selenium;
 using Reqnroll.BoDi;
 using Serilog;
 using Serilog.Core;
@@ -31,18 +33,13 @@ namespace BDDTestSuite
                 .AddEnvironmentVariables()
                 .Build();
 
-            string outputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3} {ProcessId}] {ThreadId} {Message:lj}{NewLine}";
+            string outputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3} {ProcessId}] {ThreadId} {Message:lj}{NewLine}{Exception}";
 
             _logger = new LoggerConfiguration()
                 .Enrich.WithProcessId()
                 .Enrich.WithThreadId()
-                .WriteTo.Console(
-                    outputTemplate: outputTemplate
-                    )
-                .WriteTo.File(
-                    "log.txt",
-                    outputTemplate: outputTemplate
-                    )
+                .WriteTo.Console(outputTemplate: outputTemplate)
+                .WriteTo.File("log.txt",outputTemplate: outputTemplate)
                 .CreateLogger();
             
         }
@@ -50,8 +47,22 @@ namespace BDDTestSuite
         [BeforeScenario]
         public void BeforeScenario()
         {
+            var browserName = _configuration?.GetValue<string>("browser");
+
+            ArgumentNullException.ThrowIfNull(browserName, nameof(browserName));
+
+            var driver = BrowserUtil.InitializeBrowser(browserName, headless : false);
+
+            _objectContainer.RegisterInstanceAs<IWebDriver>(driver);
             _objectContainer.RegisterInstanceAs<IConfigurationRoot?>(_configuration);
             _objectContainer.RegisterInstanceAs<ILogger?>(_logger);
+        }
+
+        [AfterScenario]
+        public void AfterScenario()
+        {
+            var driver = _objectContainer.Resolve<IWebDriver>();
+            driver?.Quit();
         }
 
     }
