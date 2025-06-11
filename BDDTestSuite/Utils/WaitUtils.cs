@@ -137,7 +137,7 @@ namespace BDDTestSuite.Utils
                 return wait.Until(d =>
                 {
                     var elements = d.FindElements(by);
-                    if (elements.All(element => element.Displayed && element.Enabled))
+                    if (elements.Count > 0 && elements.All(element => element.Displayed && element.Enabled))
                         return elements;
 
                     return null;
@@ -168,7 +168,7 @@ namespace BDDTestSuite.Utils
                 return wait.Until(d =>
                 {
                     var elements = d.FindElements(by);
-                    if (elements.All(element => element.Displayed))
+                    if (elements.Count > 0 && elements.All(element => element.Displayed))
                         return elements;
 
                     return null;
