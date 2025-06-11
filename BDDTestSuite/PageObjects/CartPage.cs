@@ -141,5 +141,20 @@ namespace BDDTestSuite.PageObjects
             }
         }
 
+        public void ClickCheckoutBtn()
+        {
+            try
+            {
+                WaitUtils
+                    .WaitUntilElementIsClickable(_driver, By.Id("checkout"), TimeSpan.FromSeconds(2))
+                    .Click();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to click on [Checkout] button");
+                throw;
+            }
+        }
+
     }
 }

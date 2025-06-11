@@ -53,6 +53,8 @@ namespace BDDTestSuite
 
             var driver = BrowserUtil.InitializeBrowser(browserName, headless : false);
 
+            driver.Manage().Window.Maximize();
+
             _objectContainer.RegisterInstanceAs<IWebDriver>(driver);
             _objectContainer.RegisterInstanceAs<IConfigurationRoot?>(_configuration);
             _objectContainer.RegisterInstanceAs<ILogger?>(_logger);
