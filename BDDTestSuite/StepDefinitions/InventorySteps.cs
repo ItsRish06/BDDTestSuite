@@ -99,5 +99,82 @@ namespace BDDTestSuite.StepDefinitions
                     );
         }
 
+        [When("user adds a product to the cart")]
+        public void WhenUserAddsAProductToTheCart()
+        {
+            var inventoryPage = new InventoryPage( _driver, _logger);
+
+            inventoryPage.AddProductToCart("1");
+
+            var productDetail = inventoryPage.GetProductDetail("1");
+
+            _scenarioContext["CartAddedProducts"] = new List<Product>() { productDetail };
+
+        }
+
+        [When("user navigates to the cart page")]
+        public void WhenUserNavigatesToTheCartPage()
+        {
+            new InventoryPage(_driver, _logger)
+                .ClickCartBtn();
+
+            WaitUtils.WaitUntilUrlChangesTo(_driver, "https://www.saucedemo.com/cart.html", TimeSpan.FromSeconds(4));
+        }
+
+        
+
+        [When("user adds multiple products to cart")]
+        public void WhenUserAddsMultipleProductsToCart()
+        {
+            var inventoryPage = new InventoryPage(_driver, _logger);
+
+            inventoryPage.AddProductToCart("1");
+            inventoryPage.AddProductToCart("3");
+            inventoryPage.AddProductToCart("5");
+
+            var cardAddedProducts = new List<Product>
+            {
+                inventoryPage.GetProductDetail("1"),
+                inventoryPage.GetProductDetail("3"),
+                inventoryPage.GetProductDetail("5")
+            };
+
+            _scenarioContext["CartAddedProducts"] = cardAddedProducts;
+
+        }
+
+        [Then("the [Add to Cart] button text for those products should change to [Remove]")]
+        public void ThenTheAddToCartButtonTextForThoseProductsShouldChangeToRemove()
+        {
+            var inventoryPage = new InventoryPage(_driver, _logger);
+
+            Assert.Equal("Remove", inventoryPage.GetProductCartBtnText("1"));
+            Assert.Equal("Remove", inventoryPage.GetProductCartBtnText("3"));
+            Assert.Equal("Remove", inventoryPage.GetProductCartBtnText("5"));
+        }
+
+        [When("user navigates back to inventory page")]
+        public void WhenUserNavigatesBackToInventoryPage()
+        {
+            var cartPage = new CartPage(_driver, _logger);
+            cartPage.ClickContinueShoppingBtn();
+
+            WaitUtils.WaitUntilUrlChangesTo(_driver, "https://www.saucedemo.com/inventory.html", TimeSpan.FromSeconds(3));
+        }
+
+        [When("user removes the added products from inventory page")]
+        public void WhenUserRemovesTheAddedProductsFromInventoryPage()
+        {
+            var inventoryPage = new InventoryPage(_driver, _logger);
+
+            //Clicks on [Add to Cart]/[Remove] button
+            inventoryPage.AddProductToCart("1");
+            inventoryPage.AddProductToCart("3");
+            inventoryPage.AddProductToCart("5");
+
+        }
+
+
+
     }
 }

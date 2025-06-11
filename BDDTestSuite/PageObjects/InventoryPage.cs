@@ -124,8 +124,55 @@ namespace BDDTestSuite.PageObjects
             {
                 _logger.Error(ex, "Failed to sort the products by {sortby} in {sortOrder} order", sortBy, sortOrder);
             }
-            
 
+        }
+
+        public void AddProductToCart(string productNumber)
+        {
+            ArgumentNullException.ThrowIfNullOrWhiteSpace(productNumber, nameof(productNumber));
+
+            try 
+            {
+                WaitUtils
+                    .WaitUntilElementIsClickable(_driver, By.XPath($"(//div[@class='inventory_item'])[{productNumber}]//button"), TimeSpan.FromSeconds(2))
+                    .Click();
+            }
+            catch(Exception ex)
+            {
+                _logger.Error(ex, "Failed to click on 'Add to Cart' button for product {productNumber}", productNumber);
+                throw;
+            }
+   
+        }
+
+        public void ClickCartBtn()
+        {
+            try
+            {
+                WaitUtils
+                    .WaitUntilElementIsClickable(_driver, By.XPath("//a[@class='shopping_cart_link']"), TimeSpan.FromSeconds(2))
+                    .Click();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to navigate to the cart page");
+                throw;
+            }
+        }
+
+        public string GetProductCartBtnText(string productNumber)
+        {
+            try
+            {
+                return WaitUtils
+                    .WaitUntilElementIsClickable(_driver, By.XPath($"(//div[@class='inventory_item'])[{productNumber}]//button"), TimeSpan.FromSeconds(2))
+                    .Text;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to get product cart button text for product number - {productNumber}", productNumber);
+                throw;
+            }
         }
 
     }
