@@ -19,10 +19,11 @@ namespace BDDTestSuite
         private readonly IObjectContainer _objectContainer;
         private static IConfigurationRoot? _configuration;
         private static ILogger? _logger;
-         
-        public Hooks(IObjectContainer objectContainer) 
+        private ScenarioContext _scenarioContext;
+        public Hooks(IObjectContainer objectContainer, ScenarioContext scenarioContext)
         {
             _objectContainer = objectContainer;
+            _scenarioContext = scenarioContext;
         }
 
         [BeforeTestRun]
@@ -33,31 +34,28 @@ namespace BDDTestSuite
                 .AddEnvironmentVariables()
                 .Build();
 
-            string outputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3} {ProcessId}] {ThreadId} {Message:lj}{NewLine}{Exception}";
+            string outputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3}] [Scenario: {Scenario}] {Message:lj}{NewLine}{Exception}";
 
             _logger = new LoggerConfiguration()
-                .Enrich.WithProcessId()
-                .Enrich.WithThreadId()
                 .WriteTo.Console(outputTemplate: outputTemplate)
                 .WriteTo.File("log.txt",outputTemplate: outputTemplate)
                 .CreateLogger();
-            
         }
 
         [BeforeScenario]
         public void BeforeScenario()
         {
             var browserName = _configuration?.GetValue<string>("browser");
-
             ArgumentNullException.ThrowIfNull(browserName, nameof(browserName));
 
-            var driver = BrowserUtil.InitializeBrowser(browserName, headless : false);
+            var contextLogger = _logger?.ForContext("Scenario", _scenarioContext.ScenarioInfo.Title);
 
+            var driver = BrowserUtil.InitializeBrowser(browserName, headless : false);
             driver.Manage().Window.Maximize();
 
             _objectContainer.RegisterInstanceAs<IWebDriver>(driver);
             _objectContainer.RegisterInstanceAs<IConfigurationRoot?>(_configuration);
-            _objectContainer.RegisterInstanceAs<ILogger?>(_logger);
+            _objectContainer.RegisterInstanceAs<ILogger?>(contextLogger);
         }
 
         [AfterScenario]
