@@ -35,6 +35,8 @@ namespace BDDTestSuite.StepDefinitions
             var cartPage = new CartPage(_driver, _logger);
             var productsOnCart = cartPage.GetAllProductDetails();
 
+            _logger.Information("Checking if the added products are visible in the cart page");
+
             Assert.Equal(
                 addedProducts.Select(product => product.Name),
                 productsOnCart.Select(product => product.Name)
@@ -55,6 +57,8 @@ namespace BDDTestSuite.StepDefinitions
         {
             var cartPage = new CartPage( _driver, _logger);
 
+            _logger.Information("Removing all the products from cart");
+
             cartPage.RemoveAllProducts();
         }
 
@@ -64,6 +68,8 @@ namespace BDDTestSuite.StepDefinitions
             var cartPage = new CartPage(_driver, _logger);
 
             var numberOfProducts = cartPage.GetNumberOfProducts();
+
+            _logger.Information("Checking if all the products are removed from the cart page");
 
             Assert.True( 
                 numberOfProducts == 0,
@@ -77,6 +83,7 @@ namespace BDDTestSuite.StepDefinitions
         {
             var cartPage = new CartPage(_driver, _logger);
 
+            _logger.Information("Removing products 1 and 2 from the cart");
 
             //Products are removed at position.
             //After removing product at pos 1, product 2 moves to pos 1 and product 3 to pos 2
@@ -99,6 +106,8 @@ namespace BDDTestSuite.StepDefinitions
             var remainingProducts = _scenarioContext.Get<List<Product>>("RemainingCartProducts");
             var cartPage = new CartPage(_driver, _logger);
             var productsOnCart = cartPage.GetAllProductDetails();
+
+            _logger.Information("Checking if only the products that are not removed are visibile on the cart page");
 
             Assert.Equal(
                 remainingProducts.Select(product => product.Name),

@@ -39,6 +39,8 @@ namespace BDDTestSuite.StepDefinitions
 
             _scenarioContext["ProductDetail"] = productDetail;
 
+            _logger.Information("Clicking on the product tile link for product - {name}", productDetail.Name);
+
             inventoryPage.ClickOnProductLink(productNumber);
         }
 
@@ -59,6 +61,8 @@ namespace BDDTestSuite.StepDefinitions
             var productDetailPage = new ProductDetailPage(_driver,_logger);
 
             var displayedProductDetail = productDetailPage.GetProductDetail();
+
+            _logger.Information("Checking if the correct product details are displayed on the page");
             
             Assert.Equal(expectedProductDetail.Name, displayedProductDetail.Name);
             Assert.Equal(expectedProductDetail.Description, displayedProductDetail.Description);
@@ -69,6 +73,8 @@ namespace BDDTestSuite.StepDefinitions
         public void WhenUserSelectsTheOptionToSortTheProductsByInOrder(string sortBy, string sortOrder)
         {
             var inventoryPage = new InventoryPage(_driver, _logger);
+
+            _logger.Information("Selecting option to sort by {sortBy} in order {sortOrder}", sortBy, sortOrder);
 
             inventoryPage.SortProductsBy(sortBy, sortOrder);
         }
@@ -93,6 +99,8 @@ namespace BDDTestSuite.StepDefinitions
                 _ => throw new ArgumentException($"Invalid sortOrder: {sortOrder}")
             };
 
+            _logger.Information("Checking if the products are sorted by {sortBy} in {sortOrder} order", sortBy, sortOrder);
+
             Assert.Equal(
                     expectedSortedProducts.Select(keySelector),
                     displayedProducts.Select(keySelector)
@@ -103,6 +111,8 @@ namespace BDDTestSuite.StepDefinitions
         public void WhenUserAddsAProductToTheCart()
         {
             var inventoryPage = new InventoryPage( _driver, _logger);
+
+            _logger.Information("Adding product 1 to cart");
 
             inventoryPage.AddProductToCart("1");
 
@@ -115,6 +125,8 @@ namespace BDDTestSuite.StepDefinitions
         [When("user navigates to the cart page")]
         public void WhenUserNavigatesToTheCartPage()
         {
+            _logger.Information("Clicking on the cart icon and navigating to the cart page");
+            
             new InventoryPage(_driver, _logger)
                 .ClickCartBtn();
 
@@ -127,6 +139,8 @@ namespace BDDTestSuite.StepDefinitions
         public void WhenUserAddsMultipleProductsToCart()
         {
             var inventoryPage = new InventoryPage(_driver, _logger);
+
+            _logger.Information("Adding products 1, 3, 5 to the cart");
 
             inventoryPage.AddProductToCart("1");
             inventoryPage.AddProductToCart("3");
@@ -148,6 +162,8 @@ namespace BDDTestSuite.StepDefinitions
         {
             var inventoryPage = new InventoryPage(_driver, _logger);
 
+            _logger.Information("Checking if the button text for the products that are added to the cart has changed to [Remove]");
+
             Assert.Equal("Remove", inventoryPage.GetProductCartBtnText("1"));
             Assert.Equal("Remove", inventoryPage.GetProductCartBtnText("3"));
             Assert.Equal("Remove", inventoryPage.GetProductCartBtnText("5"));
@@ -157,6 +173,9 @@ namespace BDDTestSuite.StepDefinitions
         public void WhenUserNavigatesBackToInventoryPage()
         {
             var cartPage = new CartPage(_driver, _logger);
+
+            _logger.Information("Clicking the [Continue Shopping] button on cart page and navigating to the inventory page");
+
             cartPage.ClickContinueShoppingBtn();
 
             WaitUtils.WaitUntilUrlChangesTo(_driver, "https://www.saucedemo.com/inventory.html", TimeSpan.FromSeconds(3));
@@ -166,6 +185,8 @@ namespace BDDTestSuite.StepDefinitions
         public void WhenUserRemovesTheAddedProductsFromInventoryPage()
         {
             var inventoryPage = new InventoryPage(_driver, _logger);
+
+            _logger.Information("Removing products 1, 3, 5 from the cart by clicking on [Remove] button on inventory page");
 
             //Clicks on [Add to Cart]/[Remove] button
             inventoryPage.AddProductToCart("1");

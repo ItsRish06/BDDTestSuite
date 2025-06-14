@@ -8,9 +8,9 @@
     "**/bin/": true,
   },
   "cucumber.glue": [ // sets the location of the step definition classes
-    "MyReqnrollProject/**/*.cs",
+    "BDDTestSuite/StepDefinitions/*.cs",
   ],
   "cucumber.features": [ // sets the location of the feature files
-    "MyReqnrollProject/**/*.feature",
+    "BDDTestSuite/StepDefinitions/*.feature",
   ]
 }

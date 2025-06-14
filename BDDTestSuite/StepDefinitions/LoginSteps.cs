@@ -79,6 +79,7 @@ namespace BDDTestSuite.StepDefinitions
             var loginPage = new LoginPage(_driver,_logger);
             var displayedError = loginPage.GetFormError();
 
+
             Assert.Equal("Epic sadface: Username and password do not match any user in this service", displayedError);
         }
 
@@ -103,7 +104,7 @@ namespace BDDTestSuite.StepDefinitions
 
             var loginPage = new LoginPage(_driver, _logger);
 
-            _logger.Information("Entering invalid username and password");
+            _logger.Information("Keeping the username and password field empty");
 
             loginPage.EnterCredentials(username, password);
             loginPage.SubmitLogin();
@@ -140,6 +141,8 @@ namespace BDDTestSuite.StepDefinitions
                 "locked out" => "Epic sadface: Sorry, this user has been locked out.",
                 _ => throw new InvalidOperationException($"Invalid error type : {errorType}")
             };
+
+            _logger.Information("Checking if error message is displayed for {errorType} credential", errorType);
 
             Assert.Equal(expectedError, displayedError);
         }

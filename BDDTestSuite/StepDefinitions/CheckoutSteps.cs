@@ -32,7 +32,8 @@ namespace BDDTestSuite.StepDefinitions
         [When("user selects the checkout option")]
         public void WhenUserSelectsTheCheckoutOption()
         {
-            new CartPage(_driver,_logger).ClickCheckoutBtn();
+            _logger.Information("Clicking on [Checkout] button on the cart page and navigating to the checkout page");
+            new CartPage(_driver, _logger).ClickCheckoutBtn();
 
             WaitUtils.WaitUntilUrlChangesTo(_driver, "https://www.saucedemo.com/checkout-step-one.html", TimeSpan.FromSeconds(2));
         }
@@ -42,11 +43,15 @@ namespace BDDTestSuite.StepDefinitions
         {
             var checkoutPage = new CheckoutPage(_driver,_logger);
 
+            _logger.Information("Checking form validation for all empty fields");
+
             checkoutPage.ClickContinueBtn();
 
             var errorMsg = checkoutPage.GetFormErrorMessage();
 
             Assert.Equal("Error: First Name is required", errorMsg);
+
+            _logger.Information("Checking form validation for empty postal code");
 
             checkoutPage.EnterFirstName("TestFN");
             checkoutPage.EnterLastName("TestLN");
@@ -58,6 +63,8 @@ namespace BDDTestSuite.StepDefinitions
 
             Assert.Equal("Error: Postal Code is required", errorMsg);
 
+            _logger.Information("Checking form validation for empty lastname");
+
             checkoutPage.EnterFirstName("TestFN");
             checkoutPage.EnterLastName("");
             checkoutPage.EnterZip("12333");
@@ -67,6 +74,8 @@ namespace BDDTestSuite.StepDefinitions
             errorMsg = checkoutPage.GetFormErrorMessage();
 
             Assert.Equal("Error: Last Name is required", errorMsg);
+
+            _logger.Information("Checking form validation for empty fistname");
 
             checkoutPage.EnterFirstName("");
             checkoutPage.EnterLastName("TestLN");
@@ -78,6 +87,8 @@ namespace BDDTestSuite.StepDefinitions
 
             Assert.Equal("Error: First Name is required", errorMsg);
 
+            _logger.Information("Checking form validation for postal code - zip should be 5 alpha-numberic long");
+
             checkoutPage.EnterFirstName("TestFN");
             checkoutPage.EnterLastName("TestLN");
             checkoutPage.EnterZip("ab1c");
@@ -87,6 +98,8 @@ namespace BDDTestSuite.StepDefinitions
             errorMsg = checkoutPage.GetFormErrorMessage();
 
             Assert.Equal("Error: Postal Code must be 5 alpha-numeric characters long", errorMsg);
+
+            _logger.Information("Checking form validation for postal code - postal code must only be alpha-numeric");
 
             checkoutPage.EnterZip("ab@1c");
             checkoutPage.ClickContinueBtn();
@@ -102,6 +115,8 @@ namespace BDDTestSuite.StepDefinitions
         {
             var checkoutPage = new CheckoutPage(_driver, _logger);
 
+            _logger.Information("Entering valid user information on checkout page");
+
             checkoutPage.EnterFirstName("TestFN");
             checkoutPage.EnterLastName("TestLN");
             checkoutPage.EnterZip("33212");
@@ -111,6 +126,7 @@ namespace BDDTestSuite.StepDefinitions
         [When("user navigates to checkout overview page")]
         public void WhenUserNavigatesToCheckoutOverviewPage()
         {
+            _logger.Information("Clicking [Continue] button on checkout page");
             new CheckoutPage(_driver, _logger).ClickContinueBtn();
 
             WaitUtils.WaitUntilUrlChangesTo(_driver, "https://www.saucedemo.com/checkout-step-two.html", TimeSpan.FromSeconds(2));
@@ -122,6 +138,8 @@ namespace BDDTestSuite.StepDefinitions
             var checkoutPage = new CheckoutPage(_driver, _logger);
             var displayedProducts = checkoutPage.GetAllProductDetails();
             var expectedProducts = _scenarioContext.Get<List<Product>>("CartAddedProducts");
+
+            _logger.Information("Checking if correct product information and price is visible on the checkout overview page");
 
             Assert.Equal(
                 expectedProducts.Select(product => product.Name),
@@ -160,6 +178,8 @@ namespace BDDTestSuite.StepDefinitions
         [When("user finishes checkout process")]
         public void WhenUserFinishesCheckoutProcess()
         {
+            _logger.Information("Clicking on [Finish] button on checkout overview page");
+
             new CheckoutPage(_driver, _logger).ClickFinishBtn();
         }
 
