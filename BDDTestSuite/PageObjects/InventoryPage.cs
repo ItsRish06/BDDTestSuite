@@ -16,12 +16,20 @@ namespace BDDTestSuite.PageObjects
     {
         readonly IWebDriver _driver;
         readonly ILogger _logger;
+
         public InventoryPage(IWebDriver driver, ILogger logger) 
         {
             _driver = driver;
             _logger = logger;
         }
 
+        /// <summary>
+        /// Retrieves the details of a product based on its position in the inventory list.
+        /// </summary>
+        /// <param name="productNumber">The one-based index representing the product's position.</param>
+        /// <returns>A <see cref="Product"/> object containing the product's details.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if productNumber is null or empty.</exception>
+        /// <exception cref="Exception">Thrown if unable to retrieve product details.</exception>
         public Product GetProductDetail(string productNumber)
         {
             ArgumentNullException.ThrowIfNullOrEmpty(productNumber, nameof(productNumber));
@@ -49,6 +57,11 @@ namespace BDDTestSuite.PageObjects
             
         }
 
+        /// <summary>
+        /// Retrieves the details of all products listed on the inventory page.
+        /// </summary>
+        /// <returns>A list of <see cref="Product"/> objects containing details of all products.</returns>
+        /// <exception cref="Exception">Thrown if unable to retrieve product details.</exception>
         public List<Product> GetAllProductDetails()
         {
 
@@ -76,6 +89,12 @@ namespace BDDTestSuite.PageObjects
 
         }
 
+        /// <summary>
+        /// Clicks on the product link to navigate to its details page.
+        /// </summary>
+        /// <param name="productNumber">The one-based index representing the product's position.</param>
+        /// <exception cref="ArgumentNullException">Thrown if productNumber is null or empty.</exception>
+        /// <exception cref="Exception">Thrown if unable to click the product link.</exception>
         public void ClickOnProductLink(string productNumber)
         {
             ArgumentNullException.ThrowIfNullOrEmpty(productNumber, nameof(productNumber));
@@ -96,6 +115,13 @@ namespace BDDTestSuite.PageObjects
             
         }
 
+        /// <summary>
+        /// Sorts the products by the specified field and order.
+        /// </summary>
+        /// <param name="sortBy">The field to sort by ("name" or "price").</param>
+        /// <param name="sortOrder">The order to sort ("ascending" or "descending").</param>
+        /// <exception cref="ArgumentNullException">Thrown if sortBy or sortOrder is null or empty.</exception>
+        /// <exception cref="ArgumentException">Thrown if an invalid combination is provided.</exception>
         public void SortProductsBy(string sortBy, string sortOrder)
         {
 
@@ -127,6 +153,12 @@ namespace BDDTestSuite.PageObjects
 
         }
 
+        /// <summary>
+        /// Adds a product to the cart based on its position in the inventory list.
+        /// </summary>
+        /// <param name="productNumber">The one-based index representing the product's position.</param>
+        /// <exception cref="ArgumentNullException">Thrown if productNumber is null or whitespace.</exception>
+        /// <exception cref="Exception">Thrown if unable to add the product to the cart.</exception>
         public void AddProductToCart(string productNumber)
         {
             ArgumentNullException.ThrowIfNullOrWhiteSpace(productNumber, nameof(productNumber));
@@ -145,6 +177,10 @@ namespace BDDTestSuite.PageObjects
    
         }
 
+        /// <summary>
+        /// Clicks the cart button to navigate to the cart page.
+        /// </summary>
+        /// <exception cref="Exception">Thrown if unable to click the cart button.</exception>
         public void ClickCartBtn()
         {
             try
@@ -160,6 +196,12 @@ namespace BDDTestSuite.PageObjects
             }
         }
 
+        /// <summary>
+        /// Retrieves the text of the cart button for a specific product.
+        /// </summary>
+        /// <param name="productNumber">The one-based index representing the product's position.</param>
+        /// <returns>The text displayed on the product's cart button.</returns>
+        /// <exception cref="Exception">Thrown if unable to retrieve the button text.</exception>
         public string GetProductCartBtnText(string productNumber)
         {
             try

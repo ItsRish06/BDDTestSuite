@@ -14,12 +14,22 @@ namespace BDDTestSuite.PageObjects
     {
         IWebDriver _driver;
         ILogger _logger;
+
         public ProductDetailPage(IWebDriver driver, ILogger logger) 
         { 
             _driver = driver;
             _logger = logger;
         }
 
+        /// <summary>
+        /// Retrieves the details of the product displayed on the product detail page.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="Product"/> object containing the product's name, description, and price.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Thrown if unable to retrieve the product details from the page.
+        /// </exception>
         public Product GetProductDetail()
         {
             try

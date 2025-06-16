@@ -14,12 +14,20 @@ namespace BDDTestSuite.PageObjects
     {
         readonly IWebDriver _driver;
         readonly ILogger _logger;
+
         public CartPage(IWebDriver driver, ILogger logger)
         {
             _driver = driver;
             _logger = logger;
         }
 
+        /// <summary>
+        /// Retrieves the details of a product based on its position in the cart display.
+        /// </summary>
+        /// <param name="productNumber">The one-based index representing the product's position in the cart.</param>
+        /// <returns>An object containing the details of the product at the specified position.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if productNumber is null or empty.</exception>
+        /// <exception cref="Exception">Thrown if unable to retrieve product details.</exception>
         public Product GetProductDetail(string productNumber)
         {
             ArgumentNullException.ThrowIfNullOrEmpty(productNumber, nameof(productNumber));
@@ -47,6 +55,11 @@ namespace BDDTestSuite.PageObjects
 
         }
 
+        /// <summary>
+        /// Retrieves the details of all products currently in the cart.
+        /// </summary>
+        /// <returns>A list of <see cref="Product"/> objects containing details of all products in the cart.</returns>
+        /// <exception cref="Exception">Thrown if unable to retrieve product details.</exception>
         public List<Product> GetAllProductDetails()
         {
 
@@ -74,6 +87,11 @@ namespace BDDTestSuite.PageObjects
 
         }
 
+        /// <summary>
+        /// Removes a product from the cart based on its position.
+        /// </summary>
+        /// <param name="productNumber">The one-based index representing the product's position in the cart.</param>
+        /// <exception cref="Exception">Thrown if unable to remove the product.</exception>
         public void RemoveProduct(string productNumber)
         {
             try
@@ -90,6 +108,10 @@ namespace BDDTestSuite.PageObjects
             
         }
 
+        /// <summary>
+        /// Removes all products from the cart.
+        /// </summary>
+        /// <exception cref="Exception">Thrown if unable to remove all products.</exception>
         public void RemoveAllProducts()
         {
             try
@@ -111,6 +133,10 @@ namespace BDDTestSuite.PageObjects
 
         }
 
+        /// <summary>
+        /// Gets the number of products currently in the cart.
+        /// </summary>
+        /// <returns>The count of products in the cart.</returns>
         public int GetNumberOfProducts()
         {
             try
@@ -126,6 +152,10 @@ namespace BDDTestSuite.PageObjects
             }
         }
 
+        /// <summary>
+        /// Clicks the "Continue Shopping" button to return to the inventory page.
+        /// </summary>
+        /// <exception cref="Exception">Thrown if unable to click the button.</exception>
         public void ClickContinueShoppingBtn()
         {
             try
@@ -141,6 +171,10 @@ namespace BDDTestSuite.PageObjects
             }
         }
 
+        /// <summary>
+        /// Clicks the "Checkout" button to proceed to the checkout page.
+        /// </summary>
+        /// <exception cref="Exception">Thrown if unable to click the button.</exception>
         public void ClickCheckoutBtn()
         {
             try
