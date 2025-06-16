@@ -46,6 +46,14 @@ Example:
 }
 ```
 Configuration is loaded at test startup in ```Hooks``` using ```Microsoft.Extensions.Configuration```.
+```
+IConfigurationRoot configuration = new ConfigurationBuilder()
+    .AddJsonFile("config.json")
+    .AddEnvironmentVariables()
+    .Build();
+
+string browser = configuration["browser"];
+```
 
 ## **Logging**
 
