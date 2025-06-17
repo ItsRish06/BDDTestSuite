@@ -11,8 +11,18 @@ using System.Threading.Tasks;
 
 namespace BDDTestSuite.Utils
 {
+    /// <summary>
+    /// Utility class for browser initialization and navigation.
+    /// </summary>
     public class BrowserUtil
     {
+        /// <summary>
+        /// Initializes a browser driver based on the specified browser name.
+        /// </summary>
+        /// <param name="browserName">Name of the browser (chrome, firefox, edge).</param>
+        /// <param name="headless">Whether to run the browser in headless mode.</param>
+        /// <returns>An initialized IWebDriver instance.</returns>
+        /// <exception cref="ArgumentException">Thrown if the browser is not supported.</exception>
         public static IWebDriver InitializeBrowser(string browserName, bool headless = false)
         {
             ArgumentNullException.ThrowIfNull(browserName, nameof(browserName));
@@ -66,6 +76,11 @@ namespace BDDTestSuite.Utils
             return driver;
         }
 
+        /// <summary>
+        /// Navigates the browser to the specified URL.
+        /// </summary>
+        /// <param name="driver">The WebDriver instance.</param>
+        /// <param name="url">The URL to navigate to.</param>
         public static void NavigateToUrl(IWebDriver driver, string url)
         {
             ArgumentNullException.ThrowIfNull(driver, nameof(driver));

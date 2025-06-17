@@ -9,8 +9,19 @@ using System.Threading.Tasks;
 
 namespace BDDTestSuite.Utils
 { 
+    /// <summary>
+    /// Utility class for explicit wait operations on web elements and URLs.
+    /// </summary>
     public class WaitUtils
     {
+        /// <summary>
+        /// Waits until the specified element is visible on the page.
+        /// </summary>
+        /// <param name="driver">The WebDriver instance.</param>
+        /// <param name="by">The locator for the element.</param>
+        /// <param name="timeout">The maximum wait time.</param>
+        /// <returns>The visible IWebElement.</returns>
+        /// <exception cref="WebDriverTimeoutException">Thrown if the element is not visible in time.</exception>
         public static IWebElement WaitUntilElementIsVisible(IWebDriver driver, By by, TimeSpan timeout)
         {
             ArgumentNullException.ThrowIfNull(driver, nameof(driver));
@@ -40,6 +51,15 @@ namespace BDDTestSuite.Utils
             }
             
         }
+
+        /// <summary>
+        /// Waits until the specified element is clickable.
+        /// </summary>
+        /// <param name="driver">The WebDriver instance.</param>
+        /// <param name="by">The locator for the element.</param>
+        /// <param name="timeout">The maximum wait time.</param>
+        /// <returns>The clickable IWebElement.</returns>
+        /// <exception cref="WebDriverTimeoutException">Thrown if the element is not clickable in time.</exception>
         public static IWebElement WaitUntilElementIsClickable(IWebDriver driver, By by, TimeSpan timeout)
         {
             ArgumentNullException.ThrowIfNull(driver, nameof(driver));
@@ -71,6 +91,14 @@ namespace BDDTestSuite.Utils
             
         }
 
+        /// <summary>
+        /// Waits until the browser's URL changes to the specified value.
+        /// </summary>
+        /// <param name="driver">The WebDriver instance.</param>
+        /// <param name="url">The expected URL.</param>
+        /// <param name="timeout">The maximum wait time.</param>
+        /// <returns>True if the URL matches; otherwise, false.</returns>
+        /// <exception cref="WebDriverTimeoutException">Thrown if the URL does not change in time.</exception>
         public static bool WaitUntilUrlChangesTo(IWebDriver driver, string url, TimeSpan timeout)
         {
             ArgumentNullException.ThrowIfNull(driver, nameof(driver));
@@ -95,6 +123,14 @@ namespace BDDTestSuite.Utils
             
         }
 
+        /// <summary>
+        /// Waits until the browser's URL contains the specified string.
+        /// </summary>
+        /// <param name="driver">The WebDriver instance.</param>
+        /// <param name="urlString">The substring to look for in the URL.</param>
+        /// <param name="timeout">The maximum wait time.</param>
+        /// <returns>True if the URL contains the string; otherwise, false.</returns>
+        /// <exception cref="WebDriverTimeoutException">Thrown if the URL does not contain the string in time.</exception>
         public static bool WaitUntilUrlContains(IWebDriver driver, string urlString, TimeSpan timeout)
         {
             ArgumentNullException.ThrowIfNull(driver, nameof(driver));
@@ -119,6 +155,14 @@ namespace BDDTestSuite.Utils
 
         }
 
+        /// <summary>
+        /// Waits until all elements located by the specified selector are clickable.
+        /// </summary>
+        /// <param name="driver">The WebDriver instance.</param>
+        /// <param name="by">The locator for the elements.</param>
+        /// <param name="timeout">The maximum wait time.</param>
+        /// <returns>A list of clickable IWebElements.</returns>
+        /// <exception cref="WebDriverTimeoutException">Thrown if the elements are not clickable in time.</exception>
         public static IList<IWebElement> WaitUntilAllElementsAreClickable(IWebDriver driver, By by, TimeSpan timeout)
         {
             ArgumentNullException.ThrowIfNull(driver, nameof(driver));
@@ -151,6 +195,14 @@ namespace BDDTestSuite.Utils
 
         }
 
+        /// <summary>
+        /// Waits until all elements located by the specified selector are visible.
+        /// </summary>
+        /// <param name="driver">The WebDriver instance.</param>
+        /// <param name="by">The locator for the elements.</param>
+        /// <param name="timeout">The maximum wait time.</param>
+        /// <returns>A list of visible IWebElements.</returns>
+        /// <exception cref="WebDriverTimeoutException">Thrown if the elements are not visible in time.</exception>
         public static IList<IWebElement> WaitUntilAllElementsAreVisible(IWebDriver driver, By by, TimeSpan timeout)
         {
             ArgumentNullException.ThrowIfNull(driver, nameof(driver));
