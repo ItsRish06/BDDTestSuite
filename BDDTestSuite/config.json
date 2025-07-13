@@ -1,12 +1,14 @@
 {
     "url": "https://www.saucedemo.com/",
     "browser": "firefox",
-    "username": {
-        "standard-user": "standard_user",
-        "locked-out-user": "locked_out_user"
-    },
-    "password": {
-        "valid": "secret_sauce",
-        "invalid": "invalid_pass"
+    "credentials": {
+        "username": {
+            "standard-user": "standard_user",
+            "locked-out-user": "locked_out_user"
+        },
+        "password": {
+            "valid": "secret_sauce",
+            "invalid": "invalid_pass"
+        }
     }
 }

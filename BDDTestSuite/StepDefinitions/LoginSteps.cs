@@ -1,4 +1,5 @@
-﻿using BDDTestSuite.PageObjects;
+﻿using BDDTestSuite.Models;
+using BDDTestSuite.PageObjects;
 using BDDTestSuite.Utils;
 using Microsoft.Extensions.Configuration;
 using OpenQA.Selenium;
@@ -18,11 +19,11 @@ namespace BDDTestSuite.StepDefinitions
         IConfigurationRoot _config;
         IWebDriver _driver;
 
-        public LoginSteps(IConfigurationRoot config, ILogger logger, IWebDriver driver) 
+        public LoginSteps(Services services) 
         {
-            _config = config;
-            _logger = logger;
-            _driver = driver;
+            _config = services.Config;
+            _logger = services.Logger;
+            _driver = services.Driver;
         }
 
         [Given("user navigates to the login page")]
@@ -38,8 +39,8 @@ namespace BDDTestSuite.StepDefinitions
         [When("user enters valid username and password")]
         public void WhenUserEntersValidUsernameAndPassword()
         {
-            var username = _config["username:standard-user"];
-            var password = _config["password:valid"];
+            var username = _config["credentials:username:standard-user"];
+            var password = _config["credentials:password:valid"];
 
             ArgumentNullException.ThrowIfNullOrEmpty(username, nameof(username));
             ArgumentNullException.ThrowIfNullOrEmpty(password, nameof(password));
@@ -113,8 +114,8 @@ namespace BDDTestSuite.StepDefinitions
         [When("user enters locked out username and password")]
         public void WhenUserEntersLockedOutUsernameAndPassword()
         {
-            var username = _config["username:locked-out-user"];
-            var password = _config["password:valid"];
+            var username = _config["credentials:username:locked-out-user"];
+            var password = _config["credentials:password:valid"];
 
             ArgumentNullException.ThrowIfNullOrEmpty(username, nameof(username));
             ArgumentNullException.ThrowIfNullOrEmpty(password, nameof(password));

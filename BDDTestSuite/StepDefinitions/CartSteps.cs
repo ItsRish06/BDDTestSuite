@@ -19,11 +19,11 @@ namespace BDDTestSuite.StepDefinitions
         IConfigurationRoot _config;
         ScenarioContext _scenarioContext;
 
-        public CartSteps(IWebDriver driver, ILogger logger, IConfigurationRoot config, ScenarioContext scenarioContext)
+        public CartSteps(Services services, ScenarioContext scenarioContext)
         {
-            _driver = driver;
-            _logger = logger;
-            _config = config;
+            _config = services.Config;
+            _logger = services.Logger;
+            _driver = services.Driver;
             _scenarioContext = scenarioContext;
         }
 
