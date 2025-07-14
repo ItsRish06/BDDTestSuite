@@ -13,9 +13,12 @@ using OpenQA.Selenium.Firefox;
 using Reqnroll.BoDi;
 using Serilog;
 using Serilog.Core;
+using Serilog.Formatting.Compact;
+using Serilog.Formatting.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,6 +43,9 @@ namespace BDDTestSuite
         private static ExtentTest _node;
         [ThreadStatic]
         private static ILogger _scenarioLogger;
+        private static List<ExtentTest> _failedNodes = [];
+        [ThreadStatic]
+        private static Queue<string> _logCollection;
        
         public Hooks(IObjectContainer objectContainer, ScenarioContext scenarioContext, FeatureContext featureContext)
         {
@@ -61,19 +67,19 @@ namespace BDDTestSuite
             _logger = new LoggerConfiguration()
                 .WriteTo.Console(outputTemplate: outputTemplate)
                 .WriteTo.File("log.txt",outputTemplate: outputTemplate)
+                .WriteTo.File(new CompactJsonFormatter(), "jlog.json")
                 .CreateLogger();
 
             var htmlReporter = new ExtentSparkReporter(Path.Combine(Directory.GetCurrentDirectory(),"Reports","Report.html"));
             _extent = new ExtentReports();
             _extent.AttachReporter(htmlReporter);
-
+            
         }
 
         [BeforeFeature]
         public static void BeforeFeature(FeatureContext featureContext)
         {
             _feature = _extent.CreateTest<Feature>(featureContext.FeatureInfo.Title, featureContext.FeatureInfo.Description);
-            
         }
 
         [BeforeScenario(Order = 0)]
@@ -89,7 +95,13 @@ namespace BDDTestSuite
             var browserName = _configuration?.GetValue<string>("browser");
             ArgumentNullException.ThrowIfNull(browserName, nameof(browserName));
 
-            _scenarioLogger = _logger?.ForContext("Scenario", _scenarioContext.ScenarioInfo.Title);
+            _logCollection = new Queue<string>();
+
+            _scenarioLogger = new LoggerConfiguration()
+                .WriteTo.Logger(_logger)
+                .WriteTo.Sink(new ExtentSink(_logCollection))
+                .Enrich.WithProperty("Scenario", _scenarioContext.ScenarioInfo.Title)
+                .CreateLogger();
             
             var driver = BrowserUtil.InitializeBrowser(browserName, headless : false);
             driver.Manage().Window.Maximize();
@@ -113,25 +125,34 @@ namespace BDDTestSuite
                 _scenarioContext.CurrentScenarioBlock, 
                 _scenarioContext.StepContext.StepInfo.Text
                 );
+           
         }
 
         
         [AfterStep]
         public void AfterStep()
         {
+            for (int i = 0; i < _logCollection.Count; i++)
+            {
+                _node.Log(Status.Info, MarkupHelper.CreateCodeBlock(_logCollection.Dequeue()));
+            }
+
             if (_scenarioContext.ScenarioExecutionStatus == ScenarioExecutionStatus.TestError)
             {
                 var driver = _objectContainer.Resolve<Services>().Driver;
                 var base64 = ScreenshotUtils.ScreenCaptureBase64(driver);
 
                 ReportUtils.LogFailure(_node, _scenarioContext.TestError, base64);
+
+                _failedNodes.Add(_node);
             }
+
+            
         }
 
         [AfterScenario]
         public void AfterScenario()
         {
-            
             var services = _objectContainer.Resolve<Services>();
             services.Driver?.Quit();
         }
