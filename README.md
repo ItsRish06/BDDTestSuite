@@ -7,6 +7,7 @@ BDDTestSuite is an automated end-to-end test suite for the SauceDemo web applica
 - Configuration Management
 - Logging
 - Utility Classes
+- Reporting
 - Scenarios & Features
 
 ## Project Structure
@@ -74,8 +75,34 @@ Utility classes in `Utils/` provide reusable helpers:
 - `BrowserUtil`: Browser initialization and navigation.
 - `WaitUtils`: Explicit waits for elements (visible, clickable, URL changes, etc.).
 - `ElementUtils`: JavaScript-based element interactions (e.g., JS click).
+- `ReportUtils`: Step node creation and failure logging.
+- `ScreenshotUtils`: A utility class that captures full‑page browser screenshots and returns them as Base64‑encoded strings.
 
 These utilities help keep step definitions and page objects clean and robust.
+
+## **Reporting** 
+
+This automation test suite integrates **Extent Reports** and **Serilog** to give you rich, step‑by‑step insights into every test run:
+
+1. **Extent Reports**  
+   - Generates an HTML report for each test run.  
+   - Automatically attaches a screenshot whenever a test fails, making it easy to see exactly what went wrong.
+
+2. **Serilog Sink for In‑Test Logging**  
+   - A custom **Serilog sink** captures all log events emitted during a test.  
+   - Log events are queued per test execution and then dequeued when attaching to Extent Report nodes.  
+   - Each BDD step node in the report includes its own detailed log output, so you can trace the exact sequence of actions and messages.
+
+### Feature View
+![Feature View](BDDTestSuite/Docs/Screenshots/report_feature_view.png)
+### Failed Scenario View
+![Failed Scenario View](BDDTestSuite/Docs/Screenshots/failed_scenario_view.png)
+### Failed Scenario Screenshot View
+![Failed Scenario Screenshot View](BDDTestSuite/Docs/Screenshots/failed_scenario_screenshot_view.png)
+### Exception Page View
+![Exception Page View](BDDTestSuite/Docs/Screenshots/exceptios_page_view.png)
+
+![Sample Report](BDDTestSuite/Docs/SampleReport)
 
 ## **Scenarios & Features**
 
@@ -87,3 +114,7 @@ Scenarios are defined in Gherkin feature files under `Features/`:
 - **Checkout** (Checkout.feature): Form validation, overview page, completing purchases.
 
 Each scenario is mapped to step definitions in `StepDefinitions/`, which use page objects and utilities to interact with the application.
+
+
+
+
