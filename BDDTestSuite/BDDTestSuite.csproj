@@ -28,6 +28,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Docs\SampleReport\" />
+    <Folder Include="Docs\Screenshots\" />
     <Folder Include="Drivers\" />
     <Folder Include="Support\" />
   </ItemGroup>
