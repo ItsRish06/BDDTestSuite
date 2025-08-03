@@ -4,6 +4,7 @@ using AventStack.ExtentReports.MarkupUtils;
 using AventStack.ExtentReports.Reporter;
 using BDDTestSuite.GenAi;
 using BDDTestSuite.GenAI;
+using BDDTestSuite.GenAI.Models;
 using BDDTestSuite.Models;
 using BDDTestSuite.Utils;
 using Microsoft.Extensions.Configuration;
@@ -223,6 +224,23 @@ namespace BDDTestSuite
         [AfterTestRun]
         public static void AfterTest()
         {
+            var failedFeatures = _featureNodes.Where(f=> f.Scenarios.Count() > 0).ToList();
+
+            foreach (var featureNode in failedFeatures) 
+            {
+                var geminiRequest = ProcessFailedFeature(featureNode);
+                var responseText = Gemini.GenerateSummary(_configuration["geminiApiKey"], geminiRequest);
+                var scenarioSummaries = JsonSerializer.Deserialize<List<Text>>(responseText);
+                var featureName = featureNode.Title;
+
+                ReportUtils.AttachSummaryToSteps(scenarioSummaries, _failedNodes, featureName);
+            }
+
+            _extent.Flush();
+        }
+
+        public static GeminiRequest ProcessFailedFeature(FeatureNode featureNode)
+        {
             var options = new JsonSerializerOptions()
             {
                 WriteIndented = false,
@@ -230,47 +248,20 @@ namespace BDDTestSuite
                 Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             };
 
-            var failedFeatures = _featureNodes.Where(f=> f.Scenarios.Count() > 0).ToList();
-
-            foreach (var featureNode in failedFeatures) 
-            {
-                var geminiRequest = new GeminiRequest()
+            var geminiRequest = new GeminiRequest()
                     .AddContentText("Here is the list of failed scenario of feature. Each scenario will have screenshot in the next part.");
 
-                foreach (var scenarioNode in featureNode.Scenarios)
-                {
-                    var failedStep = scenarioNode.Steps.Where(s => s.Status == "Fail").First();
-                    var base64 = failedStep.Screenshot;
-                    failedStep.Screenshot = null;
-                    var serialized = JsonSerializer.Serialize(scenarioNode, options);
-                    geminiRequest.AddContentText(serialized);
-                    geminiRequest.AddContentData("image/png", base64);
-                }
-
-                var responseText = Gemini.GenerateSummary(_configuration["geminiApiKey"], geminiRequest);
-                var scenarioSummaries = JsonNode.Parse(responseText).AsArray();
-
-                var featureName = featureNode.Title;
-
-                foreach (var summary in scenarioSummaries)
-                {
-                    var scenarioName = summary["scenario"].ToString();
-
-                    var failedNode = _failedNodes
-                        .Where(node => node.Model.Parent.Parent.Name == featureName && node.Model.Parent.Name == scenarioName)
-                        .First();
-
-                    failedNode.Log(Status.Info, MarkupHelper.CreateCodeBlock(
-                        "AI Summary - \n \n" +
-                        $"Summary: {summary["summary"]} \n \n" +
-                        $"Reasoning: {summary["reasoning"]} \n \n" +
-                        $"Recommendation: {summary["recommendation"]}"
-                        ));
-                }
+            foreach (var scenarioNode in featureNode.Scenarios)
+            {
+                var failedStep = scenarioNode.Steps.Where(s => s.Status == "Fail").First();
+                var base64 = failedStep.Screenshot;
+                failedStep.Screenshot = null;
+                var serialized = JsonSerializer.Serialize(scenarioNode, options);
+                geminiRequest.AddContentText(serialized);
+                geminiRequest.AddContentData("image/png", base64);
             }
 
-            _extent.Flush();
-
+            return geminiRequest;
         }
 
     }
