@@ -1,5 +1,5 @@
-# BDDTestSuite
-BDDTestSuite is an automated end-to-end test suite for the SauceDemo web application, built using .NET 8, Selenium WebDriver, Reqnroll (SpecFlow), and xUnit. It follows the Behavior-Driven Development (BDD) approach, with feature files describing user scenarios and step definitions implementing the automation logic.
+# BDDTestSuite with AI-Powered Analysis, Root Cause Detection & Summaries
+BDDTestSuite is a comprehensive end-to-end testing framework for an e-commerce web application, built on .NET 8 with Selenium WebDriver, Reqnroll (SpecFlow) and xUnit. Following a Behavior-Driven Development (BDD) workflow, it uses Gherkin feature files to describe user journeys and step definitions to drive the automation. Integrates Google’s Gemini API to deliver AI-driven analysis, root-cause detection and natural-language summaries of your test results.  
 
 ## Table of Contents
 
@@ -80,6 +80,25 @@ Utility classes in `Utils/` provide reusable helpers:
 
 These utilities help keep step definitions and page objects clean and robust.
 
+## **AI-Powered Analysis, Root Cause Detection & Summaries**  
+
+1. **Automated Test Result Summaries**
+   - After each test run, the suite calls Gemini to generate a concise, natural-language overview offailed scenarios.
+  
+2. **Insight Extraction**  
+   - Leveraging feature names, scenario steps, logs, and screenshots, Gemini extracts root causes, identifies common failure patterns, and pinpoints potential sources of test flakiness.
+  
+3. **ExtentReports Integration**
+   - The generated summary is seamlessly appended to the scenario's failed step in the report, embedding AI-driven insights directly alongside your test results.
+  
+### Failed Scenario Analysis Overview 
+ - A snapshot of the report highlighting a failed inventory test, where the AI correctly pinpoints an incorrect element locator as the root cause of the failure.
+![Inventory SS](BDDTestSuite/Docs/Screenshots/llm-summary-inventory-screenshot.png)
+![Inventory AI Analysis](BDDTestSuite/Docs/Screenshots/llm-summary-inventory.png)
+- A snapshot of the report showing a failed checkout form test, where the AI pinpoints that the test bypassed the checkout form page and proceeded to the subsequent page.
+![Inventory SS](BDDTestSuite/Docs/Screenshots/llm-summary-checkout-screenshot.png)
+![Inventory AI Analysis](BDDTestSuite/Docs/Screenshots/llm-summary-checkout.png)
+
 ## **Reporting** 
 
 This automation test suite integrates **Extent Reports** and **Serilog** to give you rich, step‑by‑step insights into every test run:
@@ -92,6 +111,9 @@ This automation test suite integrates **Extent Reports** and **Serilog** to give
    - A custom **Serilog sink** captures all log events emitted during a test.  
    - Log events are queued per test execution and then dequeued when attaching to Extent Report nodes.  
    - Each BDD step node in the report includes its own detailed log output, so you can trace the exact sequence of actions and messages.
+
+3. **AI Scenario Summary Integration**
+   - The generated summary is seamlessly appended to the scenario's failed step in the report, embedding AI-driven insights directly alongside your test results.
 
 ### Feature View
 ![Feature View](BDDTestSuite/Docs/Screenshots/report_feature_view.png)
