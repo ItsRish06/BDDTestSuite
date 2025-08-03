@@ -1,0 +1,33 @@
+﻿{
+    "responseMimeType": "application/json",
+    "responseSchema": {
+        "type": "array",
+        "items": {
+            "type": "object",
+            "properties": {
+                "scenario": {
+                    "type": "string",
+                    "description": "A concise, human‑readable title of the test scenario, indicating which functionality is under test."
+                },
+                "summary": {
+                    "type": "string",
+                    "description": "A brief overview of the scenario’s objective, the expected behavior, and what actually went wrong."
+                },
+                "reasoning": {
+                    "type": "string",
+                    "description": "A detailed breakdown of the root cause, including context, relevant error messages or logs, and any evidence of flakiness or environment issues."
+                },
+                "recommendation": {
+                    "type": "string",
+                    "description": "Actionable next steps to resolve the failure and prevent recurrence (e.g., update locators, add retries, improve waits, or adjust test data)."
+                }
+            },
+            "required": [
+                "scenario",
+                "summary",
+                "reasoning",
+                "recommendation"
+            ]
+        }
+    }
+}

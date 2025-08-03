@@ -1,10 +1,13 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.BiDi.Modules.Network;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using System;
 using System.Buffers.Text;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -53,6 +56,51 @@ namespace BDDTestSuite.Utils
             }
 
             return base64;
+        }
+
+        public static string CompressBase64Image(string base64, long quality, int maxW = 0, int maxH = 0)
+        {
+            byte[] bytes = Convert.FromBase64String(base64);
+            using var ms = new MemoryStream(bytes); 
+            using var img = Image.FromStream(ms);
+
+            Image processed = img;
+            if (maxW > 0 && maxH > 0)
+            {
+                var ratioX = (double)maxW / img.Width;
+                var ratioY = (double)maxH / img.Height;
+                var ratio = Math.Min(ratioX, ratioY);
+
+                if (ratio < 1.0)
+                {
+                    int newW = (int)(img.Width * ratio);
+                    int newH = (int)(img.Height * ratio);
+                    var thumb = new Bitmap(newW, newH);
+
+                    using (var gfx = Graphics.FromImage(thumb))
+                        gfx.DrawImage(img, 0, 0, newW, newH);
+
+                    processed = thumb;
+                }
+            }
+
+            //Find JPEG encoder
+            var jpeg = Array.Find(
+              ImageCodecInfo.GetImageEncoders(),
+              c => c.MimeType == "image/jpeg"
+            ) ?? throw new InvalidOperationException("JPEG codec not found");
+
+            //Set quality
+            var eps = new EncoderParameters(1);
+            eps.Param[0] = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, quality);
+
+            //Save to MemoryStream → byte[]
+            using var outStream = new MemoryStream();
+            processed.Save(outStream, jpeg, eps);
+            var compressedBytes = outStream.ToArray();
+
+            //byte[] → Base64
+            return Convert.ToBase64String(compressedBytes);
         }
     }
 }

@@ -37,7 +37,7 @@ namespace BDDTestSuite.PageObjects
                 return new Product()
                 {
                     Name = WaitUtils
-                    .WaitUntilElementIsVisible(_driver, By.XPath("//div[@data-test='inventory-item-name']"), TimeSpan.FromSeconds(5))
+                    .WaitUntilElementIsVisible(_driver, By.XPath("//div[@data-test='inventory-item-namee']"), TimeSpan.FromSeconds(5))
                     .Text,
                     Description = WaitUtils
                     .WaitUntilElementIsVisible(_driver, By.XPath("//div[@data-test='inventory-item-desc']"), TimeSpan.FromSeconds(5))
