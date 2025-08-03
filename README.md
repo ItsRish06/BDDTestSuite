@@ -118,7 +118,7 @@ This automation test suite integrates **Extent Reports** and **Serilog** to give
 ### Feature View
 ![Feature View](BDDTestSuite/Docs/Screenshots/report_feature_view.png)
 ### Failed Scenario View
-![Failed Scenario View](BDDTestSuite/Docs/Screenshots/failed_scenario_view.png)
+![Failed Scenario View](BDDTestSuite/Docs/Screenshots/failed-scenario-view-new.png)
 ### Failed Scenario Screenshot View
 ![Failed Scenario Screenshot View](BDDTestSuite/Docs/Screenshots/failed_scenario_screenshot_view.png)
 ### Exception Page View
