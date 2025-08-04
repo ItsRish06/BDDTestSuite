@@ -83,7 +83,7 @@ These utilities help keep step definitions and page objects clean and robust.
 ## **AI-Powered Analysis, Root Cause Detection & Summaries**  
 
 1. **Automated Test Result Summaries**
-   - After each test run, the suite calls Gemini to generate a concise, natural-language overview offailed scenarios.
+   - After each test run, the suite calls Gemini to generate a concise, natural-language overview of failed scenarios.
   
 2. **Insight Extraction**  
    - Leveraging feature names, scenario steps, logs, and screenshots, Gemini extracts root causes, identifies common failure patterns, and pinpoints potential sources of test flakiness.
