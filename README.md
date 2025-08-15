@@ -7,6 +7,7 @@ BDDTestSuite is a comprehensive end-to-end testing framework for an e-commerce w
 - Configuration Management
 - Logging
 - Utility Classes
+- AI-Powered Analysis, Root Cause Detection & Summaries
 - Reporting
 - Scenarios & Features
 
